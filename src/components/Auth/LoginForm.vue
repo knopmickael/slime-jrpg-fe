@@ -53,7 +53,7 @@ const handleLogin = async () => {
     showSuccessMessage.value = true;
 
     setTimeout(() => {
-      router.push("/dashboard"); // Redirect to dashboard or another page
+      router.push("/");
     }, 3000);
   } catch (error) {
     console.error("Failed to log in user:", error);

@@ -31,9 +31,9 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { registerUser } from "@/api/auth";
 
-const usermail = ref("");
-const username = ref("");
-const password = ref("");
+const usermail = ref("knopmickael@gmail.com");
+const username = ref("knopmickael");
+const password = ref("foobar");
 const isLoading = ref(false);
 const showSuccessMessage = ref(false);
 const router = useRouter();
@@ -52,7 +52,7 @@ const handleRegister = async () => {
         showSuccessMessage.value = true;
 
         setTimeout(() => {
-            router.push("/");
+            router.push("/login");
         }, 3000);
     } catch (error) {
         console.error("Failed to register user:", error);
