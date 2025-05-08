@@ -15,6 +15,9 @@
         <span v-if="isLoading" class="spinner"></span>
         <span v-else>Login</span>
       </button>
+      <p class="register-link">
+        New here? <a @click="goToRegister">Please register</a>
+      </p>
     </form>
   </div>
   <div v-if="showSuccessMessage" class="success-balloon">
@@ -32,6 +35,10 @@ const password = ref("foobar");
 const isLoading = ref(false);
 const showSuccessMessage = ref(false);
 const router = useRouter();
+
+const goToRegister = () => {
+  router.push("/register");
+};
 
 const handleLogin = async () => {
   isLoading.value = true;
