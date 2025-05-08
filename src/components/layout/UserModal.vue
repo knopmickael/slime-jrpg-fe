@@ -3,7 +3,7 @@
         <div class="modal-content">
             <h2>User Info</h2>
             <p><strong>Username:</strong> {{ user.username }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Email:</strong> {{ user.usermail }}</p>
             <button @click="$emit('close')">Close</button>
         </div>
     </div>

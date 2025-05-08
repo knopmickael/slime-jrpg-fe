@@ -48,7 +48,6 @@ const handleRegister = async () => {
 
     try {
         const response = await registerUser(payload);
-        console.log("User registered successfully:", response);
         showSuccessMessage.value = true;
 
         setTimeout(() => {

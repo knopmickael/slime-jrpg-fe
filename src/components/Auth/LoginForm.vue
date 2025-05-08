@@ -49,7 +49,6 @@ const handleLogin = async () => {
 
   try {
     const response = await loginUser(payload);
-    console.log("User logged in successfully:", response);
     showSuccessMessage.value = true;
 
     setTimeout(() => {
