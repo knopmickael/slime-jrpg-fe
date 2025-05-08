@@ -22,7 +22,9 @@ export const loginUser = async (payload) => {
     if (token) {
       localStorage.setItem("authToken", token);
       const userData = await getUserData(payload.username);
-      useUserStore().defaultLogIn(userData.username, userData.profilePicture, token);
+      console.log(userData);
+      
+      useUserStore().defaultLogIn(userData.username, userData.profile_picture, token);
     }
     return response.data;
   } catch (error) {

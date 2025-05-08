@@ -4,21 +4,23 @@
             <router-view></router-view>
         </main>
         <router-link to="/login" class="user-info">
-            <img :src="user.isLoggedIn ? user.profilePicture : genericProfilePicture" alt="Profile" />
-            <p>{{ user.isLoggedIn ? user.username : 'Por favor, log-in' }}</p>
+            <img :src="user.loggedIn ? user.profilePicture : genericProfilePicture" alt="Profile" />
+            <p>{{ user.loggedIn ? user.username : 'Por favor, log-in' }}</p>
         </router-link>
         <button v-if="$route.path !== '/'" class="back-home" @click="goHome">🏠</button>
     </div>
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/userStore';
-import genericProfilePicture from '@/assets/profile-default-image.png';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
-const userStore = useUserStore();
-const user = userStore.$state;
 const router = useRouter();
+const user = useUserStore().$state;
+
+console.log(user)
+
+const genericProfilePicture = 'https://1drv.ms/i/c/4ddf50075e4db0e6/IQSjg14FoQolRrm-tvHe9_0yAXDIbwzxD0ifsnTMxig_ONs?width=1024'
 
 const goHome = () => {
     router.push('/');
@@ -27,7 +29,7 @@ const goHome = () => {
 
 <style>
 .my-div {
-    background-image: url('@/assets/menu-bg.jpg');
+    background-image: url('https://1drv.ms/i/c/4ddf50075e4db0e6/IQRmCJxFE0XXRp3H9G4WZogYAQK4SkiYqwgZHOR4F5vJctM?width=1024');
     background-size: cover;
     background-position: center;
     height: 100vh;
