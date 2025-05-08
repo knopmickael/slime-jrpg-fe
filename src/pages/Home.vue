@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <h1>Home</h1>
-    <p>Bem-vindo ao Slime RPG!</p>
-  </div>
+  <Menu />
 </template>
+
+<script setup>
+import Menu from '@/components/Home/Menu.vue'
+</script>

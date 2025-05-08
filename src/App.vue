@@ -138,4 +138,9 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 </style>
