@@ -10,8 +10,19 @@
 </template>
 
 <script setup>
+import { onMounted, ref, watch } from "vue";
 import { useUserStore } from "../../stores/userStore";
-const isUserAuthenticated = useUserStore().loggedIn;
+
+const userStore = useUserStore();
+const isUserAuthenticated = ref(false);
+
+onMounted(() => {
+  isUserAuthenticated.value = userStore.loggedIn;
+});
+
+watch(() => userStore.loggedIn, (loggedIn) => {
+  isUserAuthenticated.value = loggedIn;
+});
 
 const startNewGame = () => {
   console.log("Novo Jogo...");

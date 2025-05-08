@@ -5,17 +5,26 @@
             <p><strong>Username:</strong> {{ user.username }}</p>
             <p><strong>Email:</strong> {{ user.usermail }}</p>
             <button @click="$emit('close')">Close</button>
+            <button @click="handleLogout(); $emit('close')">Logout</button>
         </div>
     </div>
 </template>
 
 <script setup>
+import { useUserStore } from '@/stores/userStore';
+
 defineProps({
     user: {
         type: Object,
         required: true,
     },
 });
+
+const userStore = useUserStore();
+
+const handleLogout = () => {
+    userStore.logOut();
+};
 </script>
 
 <style scoped>
@@ -69,6 +78,7 @@ defineProps({
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin: 10px 0; /* Add spacing between buttons */
 }
 
 .modal-content button:hover {
