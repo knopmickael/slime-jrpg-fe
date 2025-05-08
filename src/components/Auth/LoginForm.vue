@@ -4,35 +4,55 @@
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" v-model="username" required />
+        <input type="text" id="username" v-model="username" :disabled="isLoading" required />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required />
+        <input type="password" id="password" v-model="password" :disabled="isLoading" required />
       </div>
-      <button type="submit">Done</button>
-      <p class="register-link">
-        New here? <a @click="goToRegister">Please register</a>
-      </p>
+      <br />
+      <button type="submit" :disabled="isLoading">
+        <span v-if="isLoading" class="spinner"></span>
+        <span v-else>Login</span>
+      </button>
     </form>
+  </div>
+  <div v-if="showSuccessMessage" class="success-balloon">
+    Logged in successfully!
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { loginUser } from "@/api/auth";
 
-const username = ref("");
-const password = ref("");
+const username = ref("knopmickael");
+const password = ref("foobar");
+const isLoading = ref(false);
+const showSuccessMessage = ref(false);
 const router = useRouter();
 
-const handleLogin = () => {
-  console.log("Username:", username.value);
-  console.log("Password:", password.value);
-};
+const handleLogin = async () => {
+  isLoading.value = true;
+  const payload = {
+    username: username.value,
+    password: password.value,
+  };
 
-const goToRegister = () => {
-  router.push("/register");
+  try {
+    const response = await loginUser(payload);
+    console.log("User logged in successfully:", response);
+    showSuccessMessage.value = true;
+
+    setTimeout(() => {
+      router.push("/dashboard"); // Redirect to dashboard or another page
+    }, 3000);
+  } catch (error) {
+    console.error("Failed to log in user:", error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 
@@ -45,14 +65,17 @@ const goToRegister = () => {
   text-align: center;
   background: linear-gradient(145deg, #1e1e2f, #25253a);
   padding: 30px;
-  max-width: 400px; /* Added max-width */
-  width: 100%; /* Ensure responsiveness */
+  max-width: 400px;
+  /* Added max-width */
+  width: 100%;
+  /* Ensure responsiveness */
   border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5),
     0 -5px 10px rgba(255, 255, 255, 0.1);
   color: #f0f0f0;
   font-family: "Arial", sans-serif;
-  box-sizing: border-box; /* Added box-sizing */
+  box-sizing: border-box;
+  /* Added box-sizing */
 }
 
 .form-container h1 {
@@ -75,12 +98,14 @@ const goToRegister = () => {
 }
 
 .form-group input {
-  width: 100%; /* Ensure input fits within container */
+  width: 100%;
+  /* Ensure input fits within container */
   padding: 10px;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
-  box-sizing: border-box; /* Added box-sizing */
+  box-sizing: border-box;
+  /* Added box-sizing */
 }
 
 button {
@@ -123,5 +148,40 @@ button:active {
 
 .register-link a:hover {
   color: #ffa500;
+}
+
+.spinner {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ffcc00;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.success-balloon {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #32cd32;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 128, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
 }
 </style>

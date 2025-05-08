@@ -11,3 +11,15 @@ export const registerUser = async (payload) => {
         throw error;
     }
 };
+
+export const loginUser = async (payload) => {
+    try {
+        const response = await axios.post(`${API_URL}/login`, payload);
+        const token = response.data.token;
+        if (token) localStorage.setItem("authToken", token);
+        return response.data;
+    } catch (error) {
+        console.error("Error logging in user:", error);
+        throw error;
+    }
+};
