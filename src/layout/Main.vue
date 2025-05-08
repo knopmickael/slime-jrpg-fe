@@ -3,12 +3,26 @@
         <main>
             <router-view></router-view>
         </main>
+        <router-link to="/login" class="user-info">
+            <img :src="user.isLoggedIn ? user.profilePicture : genericProfilePicture" alt="Profile" />
+            <p>{{ user.isLoggedIn ? user.username : 'Por favor, log-in' }}</p>
+        </router-link>
+        <button v-if="$route.path !== '/'" class="back-home" @click="goHome">🏠</button>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const cu = ref(0)
+import { useUserStore } from '@/stores/userStore';
+import genericProfilePicture from '@/assets/profile-default-image.png';
+import { useRouter } from 'vue-router';
+
+const userStore = useUserStore();
+const user = userStore.$state;
+const router = useRouter();
+
+const goHome = () => {
+    router.push('/');
+};
 </script>
 
 <style>
@@ -25,21 +39,75 @@ const cu = ref(0)
         background-size: 105%;
         background-position: bottom left;
     }
+
     25% {
         background-size: 110%;
         background-position: top left;
     }
+
     50% {
         background-size: 115%;
         background-position: top right;
     }
+
     75% {
         background-size: 110%;
         background-position: bottom right;
     }
+
     100% {
         background-size: 105%;
         background-position: bottom left;
     }
+}
+
+.user-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.user-info:hover {
+    text-decoration: underline;
+}
+
+.user-info img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.back-home {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    color: black;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.back-home:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
 }
 </style>

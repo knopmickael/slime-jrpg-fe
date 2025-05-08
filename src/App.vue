@@ -8,6 +8,10 @@
    License: none (public domain)
 */
 
+* {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
 html,
 body,
 div,
