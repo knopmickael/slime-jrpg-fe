@@ -3,16 +3,15 @@
     <h1>Slime JRPG</h1>
     <ul class="menu-options">
       <li><button @click="startNewGame">Novo Jogo</button></li>
-      <li><button @click="continueGame" disabled>Continuar</button></li>
+      <li><button @click="continueGame" :disabled="!isUserAuthenticated">Continuar</button></li>
       <li><button @click="openConfig">Configurações</button></li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import { useUserStore } from "../../stores/userStore";
+const isUserAuthenticated = useUserStore().loggedIn;
 
 const startNewGame = () => {
   console.log("Novo Jogo...");
