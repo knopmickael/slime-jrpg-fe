@@ -3,10 +3,23 @@
         <main>
             <router-view></router-view>
         </main>
-        <router-link to="/login" class="user-info">
-            <img :src="user.loggedIn ? user.profilePicture : genericProfilePicture" alt="Profile" />
-            <p>{{ user.loggedIn ? user.username : 'Por favor, log-in' }}</p>
+        <UserModal v-if="showUserModal" :user="user" @close="toggleUserModal" />
+        <router-link
+            v-if="!user.loggedIn"
+            to="/login"
+            class="user-info"
+        >
+            <img :src="genericProfilePicture" alt="Profile" />
+            <p>Por favor, log-in</p>
         </router-link>
+        <div
+            v-else
+            class="user-info"
+            @click="toggleUserModal"
+        >
+            <img :src="user.profilePicture" alt="Profile" />
+            <p>{{ user.username }}</p>
+        </div>
         <button v-if="$route.path !== '/'" class="back-home" @click="goHome">🏠</button>
     </div>
 </template>
@@ -14,13 +27,19 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { ref } from 'vue';
+import UserModal from '@/components/layout/UserModal.vue';
 
 const router = useRouter();
 const user = useUserStore().$state;
 
-console.log(user)
+const genericProfilePicture = 'https://1drv.ms/i/c/4ddf50075e4db0e6/IQSjg14FoQolRrm-tvHe9_0yAXDIbwzxD0ifsnTMxig_ONs?width=1024';
 
-const genericProfilePicture = 'https://1drv.ms/i/c/4ddf50075e4db0e6/IQSjg14FoQolRrm-tvHe9_0yAXDIbwzxD0ifsnTMxig_ONs?width=1024'
+const showUserModal = ref(false);
+
+const toggleUserModal = () => {
+    showUserModal.value = !showUserModal.value;
+};
 
 const goHome = () => {
     router.push('/');
