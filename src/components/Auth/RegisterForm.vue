@@ -4,33 +4,61 @@
         <form @submit.prevent="handleRegister">
             <div class="form-group">
                 <label for="usermail">E-mail</label>
-                <input type="email" id="usermail" v-model="usermail" required />
+                <input type="email" id="usermail" v-model="usermail" :disabled="isLoading" required />
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" v-model="username" required />
+                <input type="text" id="username" v-model="username" :disabled="isLoading" required />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" v-model="password" required />
+                <input type="password" id="password" v-model="password" :disabled="isLoading" required />
             </div>
             <br>
-            <button type="submit">Done</button>
+            <button type="submit" :disabled="isLoading">
+                <span v-if="isLoading" class="spinner"></span>
+                <span v-else>Done</span>
+            </button>
         </form>
+    </div>
+    <div v-if="showSuccessMessage" class="success-balloon">
+        Registered successfully!
     </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { registerUser } from "@/api/auth";
 
 const usermail = ref("");
 const username = ref("");
 const password = ref("");
+const isLoading = ref(false);
+const showSuccessMessage = ref(false);
+const router = useRouter();
 
-const handleRegister = () => {
-    console.log("Registering Usermail:", usermail.value);
-    console.log("Registering Username:", username.value);
-    console.log("Registering Password:", password.value);
+const handleRegister = async () => {
+    isLoading.value = true;
+    const payload = {
+        usermail: usermail.value,
+        username: username.value,
+        password: password.value,
+    };
+
+    try {
+        const response = await registerUser(payload);
+        console.log("User registered successfully:", response);
+        showSuccessMessage.value = true;
+
+        setTimeout(() => {
+            router.push("/");
+        }, 3000);
+    } catch (error) {
+        console.error("Failed to register user:", error);
+    } finally {
+        isLoading.value = false;
+    }
 };
 </script>
 
@@ -83,6 +111,10 @@ const handleRegister = () => {
 }
 
 button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: linear-gradient(145deg, #ff7f50, #ff4500);
     color: white;
     border: none;
@@ -106,5 +138,57 @@ button:hover {
 button:active {
     transform: translateY(2px);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+button .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid transparent;
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.success-balloon {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #32cd32;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 128, 0, 0.3);
+    font-size: 1rem;
+    font-weight: bold;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
 }
 </style>
