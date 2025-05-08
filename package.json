@@ -1,12 +1,21 @@
 {
-  "name": "client",
+  "name": "slime-rpg-sqlite-client",
   "version": "1.0.0",
   "description": "",
   "main": "game.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^3.3.0",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^5.0.0"
+  }
 }
