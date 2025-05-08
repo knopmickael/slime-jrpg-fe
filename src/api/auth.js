@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useUserStore } from "../stores/userStore";
-import { getUserData } from "./users";
+import { getAuthUserData } from "./users";
 
 const API_URL = "http://localhost:3000/api/auth";
 
@@ -21,10 +21,8 @@ export const loginUser = async (payload) => {
 
     if (token) {
       localStorage.setItem("authToken", token);
-      const userData = await getUserData(payload.username);
-      console.log(userData);
-      
-      useUserStore().defaultLogIn(userData.username, userData.profile_picture, token);
+      const userData = await getAuthUserData();
+      useUserStore().defaultLogIn(userData.usermail, userData.username, userData.profile_picture, token);
     }
     return response.data;
   } catch (error) {
