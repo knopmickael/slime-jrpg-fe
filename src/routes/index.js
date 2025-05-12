@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { guestOnly } from "@/middleware/authMiddleware";
 
 const routes = [
   {
@@ -14,6 +15,7 @@ const routes = [
         path: "/login",
         name: "Login",
         component: () => import("../pages/Login.vue"),
+        beforeEnter: guestOnly,
       },
       {
         path: "/register",
