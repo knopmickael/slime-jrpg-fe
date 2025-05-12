@@ -55,8 +55,6 @@ const handleRegister = async () => {
         }, 3000);
     } catch (error) {
         console.error("Failed to register user:", error);
-    } finally {
-        isLoading.value = false;
     }
 };
 </script>

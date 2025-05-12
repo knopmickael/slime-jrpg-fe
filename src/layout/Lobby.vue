@@ -7,7 +7,7 @@
         <AppModal v-if="showAppModal" @close="toggleAppModal" />
         <UserInfo :toggleUserModal="toggleUserModal" />
         <BackHomeButton v-if="$route.path !== '/'" />
-        <HeroInfo />
+        <HeroInfo v-if="user.lastPickedHero" />
     </div>
 </template>
 

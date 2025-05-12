@@ -56,8 +56,6 @@ const handleLogin = async () => {
     }, 3000);
   } catch (error) {
     console.error("Failed to log in user:", error);
-  } finally {
-    isLoading.value = false;
   }
 };
 </script>
