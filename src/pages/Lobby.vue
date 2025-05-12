@@ -27,13 +27,15 @@ const openAppModal = () => {
 <style scoped>
 .lobby-container {
     position: fixed;
-    top: 50px;
-    left: 50px;
-    bottom: 50px;
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
     width: 500px;
     background: linear-gradient(145deg, #1e1e2f, #25253a);
     padding: 30px;
     border-radius: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5),
+        0 -5px 10px rgba(255, 255, 255, 0.1);
 }
 
 .lobby-container h1 {

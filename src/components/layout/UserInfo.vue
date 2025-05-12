@@ -13,7 +13,7 @@
 import { useUserStore } from "@/stores/userStore";
 
 const user = useUserStore().$state;
-const genericProfilePicture = "https://1drv.ms/i/c/4ddf50075e4db0e6/IQSjg14FoQolRrm-tvHe9_0yAXDIbwzxD0ifsnTMxig_ONs?width=1024";
+const genericProfilePicture = "https://1drv.ms/i/c/4ddf50075e4db0e6/IQSjg14FoQolRrm-tvHe9_0yAXDIbwzxD0ifsnTMxig_ONs?width=128";
 
 defineProps({
     toggleUserModal: {

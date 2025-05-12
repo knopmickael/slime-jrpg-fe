@@ -7,6 +7,7 @@
         <AppModal v-if="showAppModal" @close="toggleAppModal" />
         <UserInfo :toggleUserModal="toggleUserModal" />
         <BackHomeButton v-if="$route.path !== '/'" />
+        <HeroInfo />
     </div>
 </template>
 
@@ -17,6 +18,7 @@ import UserModal from "@/components/layout/UserModal.vue";
 import AppModal from "@/components/layout/AppModal.vue";
 import UserInfo from "@/components/layout/UserInfo.vue";
 import BackHomeButton from "@/components/layout/BackHomeButton.vue";
+import HeroInfo from "@/components/layout/HeroInfo.vue";
 
 const user = useUserStore().$state;
 
