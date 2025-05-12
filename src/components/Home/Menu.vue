@@ -32,7 +32,7 @@ const startNewGame = () => {
 };
 
 const continueGame = () => {
-  console.log("Continuando...");
+  router.push("/lobby");
 };
 
 const openConfig = () => {

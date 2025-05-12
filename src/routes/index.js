@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { guestOnly } from "@/middleware/authMiddleware";
+import { guestOnly, authOnly } from "@/middleware/authMiddleware";
 
 const routes = [
   {
@@ -28,6 +28,18 @@ const routes = [
         component: () => import("../pages/NotFound.vue"),
       },
     ],
+  },
+  {
+    path: "/lobby",
+    component: () => import("../layout/Lobby.vue"),
+    children: [
+      {
+        path: "",
+        name: "Lobby",
+        component: () => import("../pages/Lobby.vue"),
+      },
+    ],
+    beforeEnter: authOnly,
   },
 ];
 
