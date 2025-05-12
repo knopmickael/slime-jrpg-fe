@@ -2,8 +2,8 @@
     <div class="lobby-container">
         <h1>Bem vindo, <span>{{ username }}</span>.</h1>
         <ul class="lobby-options">
-            <li><button @click="startAdventure">Iniciar jornada</button></li>
-            <li><button @click="">Selecionar herói</button></li>
+            <li><button @click="">Iniciar jornada</button></li>
+            <li><button @click="goToHeroesList">Selecionar herói</button></li>
             <li><button disabled>Loja</button></li>
             <li><button @click="openAppModal">Configurações</button></li>
         </ul>
@@ -13,15 +13,22 @@
 <script setup>
 import { useUserStore } from "@/stores/userStore";
 import { inject } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const userStore = useUserStore();
-
 const username = userStore.username;
-const toggleAppModal = inject("toggleAppModal");
 
+const goToHeroesList = () => {
+    router.push("/lobby/heroes");
+};
+
+const toggleAppModal = inject("toggleAppModal");
 const openAppModal = () => {
     toggleAppModal();
 };
+
 </script>
 
 <style scoped>

@@ -8,6 +8,8 @@ export const useUserStore = defineStore("user", {
     usermail: "",
     username: "",
     profilePicture: null,
+    
+    lastPickedHero: null,
   }),
   actions: {
     onBootLogIn() {
@@ -21,19 +23,23 @@ export const useUserStore = defineStore("user", {
           this.usermail = decoded.usermail;
           this.username = decoded.username;
           this.profilePicture = decoded.profilePicture;
+
+          this.lastPickedHero = decoded.lastPickedHero;
         } catch (error) {
           console.error("Failed to decode token:", error);
           this.logOut();
         }
       }
     },
-    defaultLogIn(usermail, username, profilePicture, token) {
+    defaultLogIn(usermail, username, profilePicture, lastPickedHero, token) {
       this.token = token;
       this.loggedIn = true;
 
       this.usermail = usermail;
       this.username = username;
       this.profilePicture = profilePicture;
+          
+      this.lastPickedHero = lastPickedHero;
     },
     logOut() {
       localStorage.removeItem("authToken");
@@ -43,6 +49,8 @@ export const useUserStore = defineStore("user", {
       this.usermail = "";
       this.username = "";
       this.profilePicture = null;
+      
+      this.lastPickedHero = null;
     },
   },
 });

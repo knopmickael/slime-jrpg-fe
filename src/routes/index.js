@@ -7,7 +7,7 @@ const routes = [
     component: () => import("../layout/Main.vue"),
     children: [
       {
-        path: "",
+        path: "/",
         name: "Home",
         component: () => import("../pages/Home.vue"),
       },
@@ -37,6 +37,11 @@ const routes = [
         path: "",
         name: "Lobby",
         component: () => import("../pages/Lobby.vue"),
+      },
+      {
+        path: "heroes",
+        name: "HeroesList",
+        component: () => import("../pages/HeroesList.vue"),
       },
     ],
     beforeEnter: authOnly,

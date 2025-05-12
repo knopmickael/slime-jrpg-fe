@@ -11,12 +11,14 @@
 
 <script setup>
 import { onMounted, ref, watch, inject } from "vue";
-import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+
+const router = useRouter();
 
 const userStore = useUserStore();
-const router = useRouter();
 const isUserAuthenticated = ref(false);
+
 const toggleAppModal = inject("toggleAppModal");
 
 onMounted(() => {
@@ -32,7 +34,7 @@ const startNewGame = () => {
 };
 
 const continueGame = () => {
-  router.push("/lobby");
+  router.push(userStore.lastPickedHero ? "/lobby" : "/lobby/heroes");
 };
 
 const openConfig = () => {
