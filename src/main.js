@@ -2,15 +2,14 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import routes from './routes';
 import { createPinia } from 'pinia';
-import { useUserStore } from './stores/userStore';
+import { init as bootstrapApp } from './services/bootstrapper';
 
 const app = createApp(App);
 
 const pinia = createPinia();
 app.use(pinia);
 
-const userStore = useUserStore();
-userStore.onBootLogIn();
+bootstrapApp();
 
 app.use(routes); 
 app.mount('#app');
