@@ -57,38 +57,10 @@ const goHome = () => {
 
 <style>
 .my-div {
-    background-image: url('https://1drv.ms/i/c/4ddf50075e4db0e6/IQRmCJxFE0XXRp3H9G4WZogYAQK4SkiYqwgZHOR4F5vJctM?width=1024');
+    background-image: url('https://1drv.ms/i/c/4ddf50075e4db0e6/IQRa6bnWvvJRSYtSzajwOo0FASOADAD6AC66VPC3ewMPWfs?width=1920');
     background-size: cover;
     background-position: center;
     height: 100vh;
-    animation: pan-zoom 20s infinite alternate ease-in-out;
-}
-
-@keyframes pan-zoom {
-    0% {
-        background-size: 105%;
-        background-position: bottom left;
-    }
-
-    25% {
-        background-size: 110%;
-        background-position: top left;
-    }
-
-    50% {
-        background-size: 115%;
-        background-position: top right;
-    }
-
-    75% {
-        background-size: 110%;
-        background-position: bottom right;
-    }
-
-    100% {
-        background-size: 105%;
-        background-position: bottom left;
-    }
 }
 
 .user-info {

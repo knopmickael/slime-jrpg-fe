@@ -1,6 +1,6 @@
 <template>
   <div class="menu-container">
-    <h1>Slime JRPG</h1>
+    <h1>Slime <span>JRPG</span></h1>
     <ul class="menu-options">
       <li><button @click="startNewGame" :disabled="isUserAuthenticated">Novo Jogo</button></li>
       <li><button @click="continueGame" :disabled="!isUserAuthenticated">Continuar</button></li>
@@ -60,8 +60,12 @@ const openConfig = () => {
 .menu-container h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  color: #ffcc00;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.menu-container h1 span {
+  font-weight: bold;
+  color: #ffcc00;
 }
 
 .menu-options {
