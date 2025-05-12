@@ -5,17 +5,23 @@
             <li><button @click="startAdventure">Iniciar jornada</button></li>
             <li><button @click="">Selecionar herói</button></li>
             <li><button disabled>Loja</button></li>
-            <li><button @click="">Configurações</button></li>
+            <li><button @click="openAppModal">Configurações</button></li>
         </ul>
     </div>
 </template>
 
 <script setup>
 import { useUserStore } from "@/stores/userStore";
+import { inject } from "vue";
 
 const userStore = useUserStore();
 
 const username = userStore.username;
+const toggleAppModal = inject("toggleAppModal");
+
+const openAppModal = () => {
+    toggleAppModal();
+};
 </script>
 
 <style scoped>
