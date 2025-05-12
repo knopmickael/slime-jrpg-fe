@@ -2,7 +2,7 @@
   <div class="menu-container">
     <h1>Slime JRPG</h1>
     <ul class="menu-options">
-      <li><button @click="startNewGame">Novo Jogo</button></li>
+      <li><button @click="startNewGame" :disabled="isUserAuthenticated">Novo Jogo</button></li>
       <li><button @click="continueGame" :disabled="!isUserAuthenticated">Continuar</button></li>
       <li><button @click="openConfig">Configurações</button></li>
     </ul>
@@ -10,11 +10,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, inject } from "vue";
 import { useUserStore } from "../../stores/userStore";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
+const router = useRouter();
 const isUserAuthenticated = ref(false);
+const toggleAppModal = inject("toggleAppModal");
 
 onMounted(() => {
   isUserAuthenticated.value = userStore.loggedIn;
@@ -25,7 +28,7 @@ watch(() => userStore.loggedIn, (loggedIn) => {
 });
 
 const startNewGame = () => {
-  console.log("Novo Jogo...");
+  router.push("/login");
 };
 
 const continueGame = () => {
@@ -33,7 +36,7 @@ const continueGame = () => {
 };
 
 const openConfig = () => {
-  console.log("Abrindo configurações...");
+  toggleAppModal();
 };
 </script>
 
