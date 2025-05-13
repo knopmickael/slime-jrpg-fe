@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { getAuthUserData } from "@/api/users";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -8,28 +9,36 @@ export const useUserStore = defineStore("user", {
     usermail: "",
     username: "",
     profilePicture: null,
-    
+
     lastPickedHero: null,
   }),
   actions: {
-    onBootLogIn() {
+    async onBootLogIn() {
       const token = localStorage.getItem("authToken");
-      if (token) {
-        try {
-          this.token = token;
-          this.loggedIn = true;
+      if (!token) return;
 
-          const decoded = parseJwt(token);
-          this.usermail = decoded.usermail;
-          this.username = decoded.username;
-          this.profilePicture = decoded.profilePicture;
-
-          this.lastPickedHero = decoded.lastPickedHero;
-        } catch (error) {
-          console.error("Failed to decode token:", error);
-          this.logOut();
-        }
+      let isTokenExpired = false;
+      try {
+        isTokenExpired = await getAuthUserData();
+        if (isTokenExpired) isTokenExpired = isTokenExpired.username;
+      } catch (error) {
+        isTokenExpired = error.message;
       }
+
+      if (isTokenExpired.includes("401")) {
+        localStorage.removeItem("authToken");
+        return;
+      }
+
+      this.token = token;
+      this.loggedIn = true;
+
+      const decoded = parseJwt(token);
+      this.usermail = decoded.usermail;
+      this.username = decoded.username;
+      this.profilePicture = decoded.profilePicture;
+
+      this.lastPickedHero = decoded.lastPickedHero;
     },
     defaultLogIn(usermail, username, profilePicture, lastPickedHero, token) {
       this.token = token;
@@ -38,7 +47,7 @@ export const useUserStore = defineStore("user", {
       this.usermail = usermail;
       this.username = username;
       this.profilePicture = profilePicture;
-          
+
       this.lastPickedHero = lastPickedHero;
     },
     logOut() {
@@ -49,7 +58,7 @@ export const useUserStore = defineStore("user", {
       this.usermail = "";
       this.username = "";
       this.profilePicture = null;
-      
+
       this.lastPickedHero = null;
     },
   },
