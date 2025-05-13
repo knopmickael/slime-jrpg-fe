@@ -1,0 +1,10 @@
+Crie uma coleção de imagens em PNG com fundo transparente, representando personagens de um jogo chamado "Slime World JRPG", com estilo visual inspirado em jogos clássicos de plataforma como Mario e Sonic, com uma estética cartunesca, colorida, amigável e com toque moderno.
+
+O personagem será um slimes elemental: de Fogo (vermelho vibrante com detalhes alaranjados, olhos flamejantes e personalidade energética), gere 5 imagens para ele:
+    - uma imagem em formato de ícone redondo, como se fosse um avatar de perfil com o slime centralizado e expressando sua personalidade, com possíveis efeitos ao redor (fagulhas, brisa ou névoa gélida);
+    - uma imagem de corpo inteiro em pose neutra, com visual amigável, proporções caricatas (estilo chibi ou cartoon leve), traços limpos e estética vetorizada;
+    - uma imagem de corpo inteiro em pose de ataque, com movimento sugerido e efeitos visuais relacionados ao seu elemento (bola de fogo, estilhaços de gelo ou rajada de vento);
+    - uma imagem de corpo inteiro em posição de desconforto, como se tivesse acabado de receber um golpe de outro slime (tente utilizar o conceito dos olhos em X, como a carinha: x_x);
+    - uma imagem de corpo inteiro em gesto de comemoração, como se tivesse acabado de ganhar uma batalha contra outro slime;
+
+A arte deve ser vibrante, ter contornos suaves, estilo cel shading simples e proporções pensadas para uso em jogos de plataforma. Use uma resolução alta, com ícones de no mínimo 1024x1024px e personagens com cerca de 2000px de altura. Seja criativo e mantenha consistência visual entre os três slimes, como se fizessem parte do mesmo universo.
