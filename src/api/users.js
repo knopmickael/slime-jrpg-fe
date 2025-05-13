@@ -29,3 +29,13 @@ export const getAuthUserData = async () => {
     throw error;
   }
 };
+
+export const setLastPickedHero = async (id) => {
+  try {
+    const response = await axios.post(`/users/set-lph`, { id });
+    return response.data;
+  } catch (error) {
+    console.error("Error setting last picked hero:", error);
+    throw error;
+  }
+};

@@ -1,18 +1,19 @@
 <template>
-  <div class="hero-info">
+  <div class="hero-info" v-if="hero">
     <div class="hero-details">
       <h1>{{ hero.name }}</h1>
       <h2>{{ hero.type }} Lv.{{ hero.level }}</h2>
     </div>
-    <img :src="hero.profilePicture" alt="Hero Profile" />
+    <img :src="hero.profile_picture" alt="Hero Profile" />
   </div>
 </template>
 
 <script setup>
-import { useHeroStore } from "@/stores/heroStore";
+import { computed, watch } from "vue";
+import { useUserStore } from "@/stores/userStore";
 
-const heroStore = useHeroStore();
-const hero = heroStore.userPickedHero;
+const userStore = useUserStore();
+const hero = computed(() => userStore.lastPickedHero);
 </script>
 
 <style scoped>
