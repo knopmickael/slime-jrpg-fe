@@ -5,9 +5,10 @@
         </main>
         <UserModal v-if="showUserModal" :user="user" @close="toggleUserModal" />
         <AppModal v-if="showAppModal" @close="toggleAppModal" />
+        <HeroSprite />
         <UserInfo :toggleUserModal="toggleUserModal" />
-        <BackHomeButton v-if="$route.path !== '/'" />
         <HeroInfo v-if="user.lastPickedHero" />
+        <BackHomeButton v-if="$route.path !== '/'" />
     </div>
 </template>
 
@@ -16,6 +17,7 @@ import { provide, ref } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import UserModal from "@/components/layout/UserModal.vue";
 import AppModal from "@/components/layout/AppModal.vue";
+import HeroSprite from "@/components/layout/HeroSprite.vue";
 import UserInfo from "@/components/layout/UserInfo.vue";
 import BackHomeButton from "@/components/layout/BackHomeButton.vue";
 import HeroInfo from "@/components/layout/HeroInfo.vue";
