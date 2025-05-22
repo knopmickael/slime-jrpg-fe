@@ -40,7 +40,7 @@ provide("toggleAppModal", toggleAppModal);
 
 <style>
 .my-div {
-    background-image: url('https://1drv.ms/i/c/4ddf50075e4db0e6/IQRa6bnWvvJRSYtSzajwOo0FASOADAD6AC66VPC3ewMPWfs?width=1920');
+    background-image: url('../../public/assets/images/lobby-bg.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
