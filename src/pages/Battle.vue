@@ -14,32 +14,34 @@
 
         <div class="slimes-row">
             <div class="slime-side player">
-                <img :src="playerHero.idle_sprite" class="slime-img" :class="{ animate: playerAttackAnim }" />
-                <div v-if="battleEnded && playerHP > 0" class="battle-result">Vitória!</div>
-                <div v-if="battleEnded && playerHP <= 0" class="battle-result">Derrota!</div>
+                <img :src="playerSprite" class="slime-img" :class="{ animate: playerAttackAnim }" />
             </div>
             <div class="slime-side enemy">
-                <img :src="enemyHero.idle_sprite" class="slime-img" :class="{ animate: enemyAttackAnim }" />
+                <img :src="enemySprite" class="slime-img" :class="['slime-img-enemy', { animate: enemyAttackAnim }]"
+                    style="transform: scaleX(-1);" />
             </div>
         </div>
 
         <div class="battle-joystick">
             <button @click="attackEnemy" :disabled="isAnimating || turn !== 'player' || battleEnded">Atacar</button>
-            <button class="defend-btn" @click="defend" :disabled="isAnimating || turn !== 'player' || battleEnded">Defender</button>
-            <button class="abort-btn" @click="goToLobby">Abortar</button>
+            <button class="defend-btn" @click="defend"
+                :disabled="isAnimating || turn !== 'player' || battleEnded">Defender</button>
+            <button class="abort-btn" @click="abort"
+                :disabled="isAnimating || turn !== 'player' || battleEnded">Abortar</button>
         </div>
 
         <div v-if="battleEnded" class="battle-end-modal">
             <div class="battle-end-modal-bg"></div>
-            <button class="battle-end-btn" @click="goToLobby">
-                Parabéns!<br>Voltar ao Lobby
+            <button class="battle-end-btn" :class="{ lose: playerHP <= 0 }" @click="goToLobby">
+                <span v-if="playerHP > 0">Parabéns!<br>Voltar ao Lobby</span>
+                <span v-else>Que pena, voltar ao lobby</span>
             </button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
 
@@ -50,9 +52,9 @@ const playerHero = userStore.lastPickedHero;
 // Hardcoded purple slime as enemy for now
 const enemyHero = {
     name: "Purple Slime",
-    hp: 70,
-    atk: 3,
-    def: 5,
+    hp: 40,
+    atk: 12,
+    def: 3,
     description: "O mais enigmático dos três, o Purple Slime resiste ao tempo com sua incrível vitalidade. Seus ataques são fracos, mas sua defesa e HP o transformam num verdadeiro muro gelatinoso.",
     idle_sprite: "/assets/images/slimes/purple/idle.png",
     attack_sprite: "/assets/images/slimes/purple/attack.png",
@@ -78,15 +80,28 @@ function calcDamage(attacker, defender) {
     return Math.max(1, Math.round(attacker.atk - defender.def / 2));
 }
 
+const playerSprite = ref(playerHero.idle_sprite);
+const enemySprite = ref(enemyHero.idle_sprite);
+
+async function showSprite(refSprite, spriteUrl, duration = 400) {
+    const prev = refSprite.value;
+    refSprite.value = spriteUrl;
+    await new Promise(r => setTimeout(r, duration));
+    refSprite.value = prev;
+}
+
 const attackEnemy = async () => {
     if (battleEnded.value) return;
     isAnimating.value = true;
     playerAttackAnim.value = true;
-    await new Promise(r => setTimeout(r, 500));
+    await showSprite(playerSprite, playerHero.attack_sprite, 400);
+    await new Promise(r => setTimeout(r, 100));
+    // Enemy receives damage
+    await showSprite(enemySprite, enemyHero.damage_received_sprite, 350);
     const dmg = calcDamage(playerHero, enemyHero);
     enemyHP.value = Math.max(0, enemyHP.value - dmg);
     playerAttackAnim.value = false;
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise(r => setTimeout(r, 200));
     if (enemyHP.value <= 0) {
         battleEnded.value = true;
         isAnimating.value = false;
@@ -107,12 +122,15 @@ const defend = async () => {
 const enemyTurn = async (playerDefending = false) => {
     await new Promise(r => setTimeout(r, 600));
     enemyAttackAnim.value = true;
-    await new Promise(r => setTimeout(r, 500));
+    await showSprite(enemySprite, enemyHero.attack_sprite, 400);
+    await new Promise(r => setTimeout(r, 100));
+    // Player receives damage
+    await showSprite(playerSprite, playerHero.damage_received_sprite, 350);
     let dmg = calcDamage(enemyHero, playerHero);
     if (playerDefending) dmg = Math.floor(dmg / 2);
     playerHP.value = Math.max(0, playerHP.value - dmg);
     enemyAttackAnim.value = false;
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise(r => setTimeout(r, 200));
     if (playerHP.value <= 0) {
         battleEnded.value = true;
         isAnimating.value = false;
@@ -124,9 +142,32 @@ const enemyTurn = async (playerDefending = false) => {
 
 const router = useRouter();
 
-function goToLobby() {
+async function abort() {
+    playerSprite.value = playerHero.damage_received_sprite;
+    await new Promise(r => setTimeout(r, 1500));
     router.push("/lobby");
 }
+async function goToLobby() {
+    await new Promise(r => setTimeout(r, 1500));
+    router.push("/lobby");
+}
+
+watch(
+    () => battleEnded.value,
+    (ended) => {
+        if (ended) {
+            if (playerHP.value > 0) {
+                // Player wins
+                playerSprite.value = playerHero.celebration_sprite;
+                enemySprite.value = enemyHero.damage_received_sprite;
+            } else {
+                // Enemy wins
+                playerSprite.value = playerHero.damage_received_sprite;
+                enemySprite.value = enemyHero.celebration_sprite;
+            }
+        }
+    }
+);
 </script>
 
 <style scoped>
@@ -237,11 +278,15 @@ function goToLobby() {
     display: block;
     margin-bottom: 0;
     margin-top: 90px !important;
-    /* Add margin on top of each slime sprite */
 }
 
 .slime-img.animate {
-    animation: attackAnim 0.5s;
+    animation: attackAnim 0.9s;
+}
+
+.slime-img-enemy {
+    /* Always flip horizontally for all enemy sprites, including during animation */
+    transform: scaleX(-1);
 }
 
 @keyframes attackAnim {
@@ -288,6 +333,7 @@ function goToLobby() {
 .battle-joystick button:not(.defend-btn):not(.abort-btn) {
     background: linear-gradient(145deg, #ff7f50, #ff4500);
 }
+
 .battle-joystick button:not(.defend-btn):not(.abort-btn):hover {
     background: linear-gradient(145deg, #ffa07a, #ff6347);
 }
@@ -297,6 +343,7 @@ function goToLobby() {
     background: linear-gradient(145deg, #43e643, #228B22);
     color: #fff;
 }
+
 .battle-joystick .defend-btn:hover {
     background: linear-gradient(145deg, #32cd32, #228B22);
     color: #fff;
@@ -307,6 +354,7 @@ function goToLobby() {
     background: linear-gradient(145deg, #7fdfff, #3a8dde);
     color: #fff;
 }
+
 .battle-joystick .abort-btn:hover {
     background: linear-gradient(145deg, #b3e6ff, #5faaff);
     color: #fff;
@@ -372,7 +420,7 @@ function goToLobby() {
     border-radius: 24px;
     font-size: 2rem;
     font-weight: bold;
-    box-shadow: 0 8px 32px rgba(34, 139, 34, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     transition: background 0.2s, transform 0.2s, border 0.2s;
     outline: none;
@@ -384,5 +432,14 @@ function goToLobby() {
     background: linear-gradient(145deg, #43e643, #228B22);
     transform: scale(1.05);
     border: 4px solid #fffc;
+}
+
+.battle-end-btn.lose {
+    background: linear-gradient(145deg, #ff7f50, #ff4500);
+    border: 4px solid #fff3;
+}
+
+.battle-end-btn.lose:hover {
+    background: linear-gradient(145deg, #ffa07a, #ff6347);
 }
 </style>
