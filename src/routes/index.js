@@ -46,6 +46,18 @@ const routes = [
     ],
     beforeEnter: authOnly,
   },
+  {
+    path: "/battle",
+    component: () => import("../layout/Battle.vue"),
+    children: [
+      {
+        path: "",
+        name: "Battle",
+        component: () => import("../pages/Battle.vue"),
+      },
+    ],
+    beforeEnter: authOnly,
+  },
 ];
 
 const router = createRouter({

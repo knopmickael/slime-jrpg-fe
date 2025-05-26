@@ -2,7 +2,14 @@
     <div class="lobby-container">
         <h1>Bem vindo, <span>{{ username }}</span>.</h1>
         <ul class="lobby-options">
-            <li><button @click="">Iniciar jornada</button></li>
+            <li>
+                <button 
+                    @click="goToBattle" 
+                    :disabled="!userStore.lastPickedHero"
+                >
+                    Iniciar jornada
+                </button>
+            </li>
             <li><button @click="goToHeroesList">Selecionar herói</button></li>
             <li><button disabled>Loja</button></li>
             <li><button @click="openAppModal">Configurações</button></li>
@@ -22,6 +29,10 @@ const username = userStore.username;
 
 const goToHeroesList = () => {
     router.push("/lobby/heroes");
+};
+
+const goToBattle = () => {
+    router.push("/battle");
 };
 
 const toggleAppModal = inject("toggleAppModal");
