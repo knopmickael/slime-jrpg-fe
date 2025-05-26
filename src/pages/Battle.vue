@@ -24,18 +24,24 @@
         </div>
 
         <div class="battle-joystick">
-            <button @click="attackEnemy"
-                :disabled="isAnimating || turn !== 'player' || battleEnded">Atacar</button>
-            <button @click="defend"
-                :disabled="isAnimating || turn !== 'player' || battleEnded">Defender</button>
+            <button @click="attackEnemy" :disabled="isAnimating || turn !== 'player' || battleEnded">Atacar</button>
+            <button class="defend-btn" @click="defend" :disabled="isAnimating || turn !== 'player' || battleEnded">Defender</button>
+            <button class="abort-btn" @click="goToLobby">Abortar</button>
         </div>
 
+        <div v-if="battleEnded" class="battle-end-modal">
+            <div class="battle-end-modal-bg"></div>
+            <button class="battle-end-btn" @click="goToLobby">
+                Parabéns!<br>Voltar ao Lobby
+            </button>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import { useUserStore } from "@/stores/userStore";
+import { useRouter } from "vue-router";
 
 // Use the user's selected hero as player
 const userStore = useUserStore();
@@ -115,6 +121,12 @@ const enemyTurn = async (playerDefending = false) => {
     turn.value = "player";
     isAnimating.value = false;
 };
+
+const router = useRouter();
+
+function goToLobby() {
+    router.push("/lobby");
+}
 </script>
 
 <style scoped>
@@ -180,7 +192,8 @@ const enemyTurn = async (playerDefending = false) => {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center; /* Center vertically */
+    align-items: center;
+    /* Center vertically */
     flex: 1;
     width: 100%;
     position: absolute;
@@ -223,7 +236,8 @@ const enemyTurn = async (playerDefending = false) => {
     transition: transform 0.2s;
     display: block;
     margin-bottom: 0;
-    margin-top: 90px !important; /* Add margin on top of each slime sprite */
+    margin-top: 90px !important;
+    /* Add margin on top of each slime sprite */
 }
 
 .slime-img.animate {
@@ -258,25 +272,49 @@ const enemyTurn = async (playerDefending = false) => {
 }
 
 .battle-joystick button {
-    background: linear-gradient(145deg, #ff7f50, #ff4500);
-    color: white;
     border: none;
     padding: 18px 40px;
     border-radius: 14px;
     cursor: pointer;
     font-size: 1.4rem;
     font-weight: bold;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    color: white;
+    outline: none;
+}
+
+/* Attack: orange/red */
+.battle-joystick button:not(.defend-btn):not(.abort-btn) {
+    background: linear-gradient(145deg, #ff7f50, #ff4500);
+}
+.battle-joystick button:not(.defend-btn):not(.abort-btn):hover {
+    background: linear-gradient(145deg, #ffa07a, #ff6347);
+}
+
+/* Defend: green */
+.battle-joystick .defend-btn {
+    background: linear-gradient(145deg, #43e643, #228B22);
+    color: #fff;
+}
+.battle-joystick .defend-btn:hover {
+    background: linear-gradient(145deg, #32cd32, #228B22);
+    color: #fff;
+}
+
+/* Abort: blue */
+.battle-joystick .abort-btn {
+    background: linear-gradient(145deg, #7fdfff, #3a8dde);
+    color: #fff;
+}
+.battle-joystick .abort-btn:hover {
+    background: linear-gradient(145deg, #b3e6ff, #5faaff);
+    color: #fff;
 }
 
 .battle-joystick button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-.battle-options {
-    display: none; /* Hide original options */
 }
 
 .vs-text {
@@ -298,5 +336,53 @@ const enemyTurn = async (playerDefending = false) => {
 
 .battle-result:has(+ .battle-result) {
     color: #ff4d4d;
+}
+
+.battle-end-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.battle-end-modal-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 101;
+}
+
+.battle-end-btn {
+    position: relative;
+    z-index: 102;
+    background: linear-gradient(145deg, #32cd32, #228B22);
+    color: white;
+    border: 4px solid #fff;
+    padding: 32px 80px;
+    border-radius: 24px;
+    font-size: 2rem;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(34, 139, 34, 0.4);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, border 0.2s;
+    outline: none;
+    text-align: center;
+    display: block;
+}
+
+.battle-end-btn:hover {
+    background: linear-gradient(145deg, #43e643, #228B22);
+    transform: scale(1.05);
+    border: 4px solid #fffc;
 }
 </style>
