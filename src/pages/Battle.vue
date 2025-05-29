@@ -14,9 +14,11 @@
 
         <div class="slimes-row">
             <div class="slime-side player">
+                <div v-if="playerDamageText" class="damage-float player-damage">{{ playerDamageText }}</div>
                 <img :src="playerSprite" class="slime-img" :class="{ animate: playerAttackAnim }" />
             </div>
             <div class="slime-side enemy">
+                <div v-if="enemyDamageText" class="damage-float enemy-damage">{{ enemyDamageText }}</div>
                 <img :src="enemySprite" class="slime-img" :class="['slime-img-enemy', { animate: enemyAttackAnim }]"
                     style="transform: scaleX(-1);" />
             </div>
@@ -90,6 +92,17 @@ async function showSprite(refSprite, spriteUrl, duration = 400) {
     refSprite.value = prev;
 }
 
+const playerDamageText = ref("");
+const enemyDamageText = ref("");
+
+// Helper to show damage text for a short time
+function showDamage(refText, dmg) {
+    refText.value = `-${dmg}`;
+    setTimeout(() => {
+        refText.value = "";
+    }, 900);
+}
+
 const attackEnemy = async () => {
     if (battleEnded.value) return;
     isAnimating.value = true;
@@ -100,6 +113,7 @@ const attackEnemy = async () => {
     await showSprite(enemySprite, enemyHero.damage_received_sprite, 350);
     const dmg = calcDamage(playerHero, enemyHero);
     enemyHP.value = Math.max(0, enemyHP.value - dmg);
+    showDamage(enemyDamageText, dmg);
     playerAttackAnim.value = false;
     await new Promise(r => setTimeout(r, 200));
     if (enemyHP.value <= 0) {
@@ -129,6 +143,7 @@ const enemyTurn = async (playerDefending = false) => {
     let dmg = calcDamage(enemyHero, playerHero);
     if (playerDefending) dmg = Math.floor(dmg / 2);
     playerHP.value = Math.max(0, playerHP.value - dmg);
+    showDamage(playerDamageText, dmg);
     enemyAttackAnim.value = false;
     await new Promise(r => setTimeout(r, 200));
     if (playerHP.value <= 0) {
@@ -258,6 +273,7 @@ watch(
     min-height: 0;
     margin-bottom: 0;
     justify-content: flex-end;
+    position: relative;
 }
 
 .slime-side.player {
@@ -271,8 +287,8 @@ watch(
 }
 
 .slime-img {
-    width: 290px;
-    height: 290px;
+    width: 400px;
+    height: 400px;
     object-fit: contain;
     transition: transform 0.2s;
     display: block;
@@ -441,5 +457,51 @@ watch(
 
 .battle-end-btn.lose:hover {
     background: linear-gradient(145deg, #ffa07a, #ff6347);
+}
+
+.damage-float {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffcd44;
+    text-shadow: 0 2px 8px #000, 0 0 2px #fff;
+    pointer-events: none;
+    animation: damageFloatAnim 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 20;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.player-damage {
+    top: 30px;
+}
+
+.enemy-damage {
+    top: 30px;
+}
+
+.slime-side {
+    position: relative;
+}
+
+@keyframes damageFloatAnim {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px) scale(1.2);
+    }
+    10% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1.1);
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-30px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-50px) scale(0.95);
+    }
 }
 </style>

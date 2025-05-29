@@ -49,7 +49,7 @@ export const useUserStore = defineStore("user", {
       this.username = username;
       this.profilePicture = profilePicture;
 
-      this.lastPickedHero = lastPickedHero;
+      this.lastPickedHero = JSON.parse(lastPickedHero);
     },
     renewToken(token) {
       this.token = token;
