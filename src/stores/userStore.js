@@ -34,6 +34,7 @@ export const useUserStore = defineStore("user", {
       this.loggedIn = true;
 
       const decoded = parseJwt(token);
+
       this.usermail = decoded.usermail;
       this.username = decoded.username;
       this.profilePicture = decoded.profilePicture;
@@ -49,6 +50,10 @@ export const useUserStore = defineStore("user", {
       this.profilePicture = profilePicture;
 
       this.lastPickedHero = lastPickedHero;
+    },
+    renewToken(token) {
+      this.token = token;
+      localStorage.setItem("authToken", token);
     },
     logOut() {
       localStorage.removeItem("authToken");

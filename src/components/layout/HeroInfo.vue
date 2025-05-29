@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { useUserStore } from "@/stores/userStore";
 
 const userStore = useUserStore();

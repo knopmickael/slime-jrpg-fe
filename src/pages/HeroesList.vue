@@ -36,7 +36,6 @@ const selectedHero = ref(null);
 const fetchHeroes = async () => {
     try {
         heroes.value = await listHeroes();
-        // Automatically select the current picked hero if it exists
         if (userStore.lastPickedHero) {
             selectedHero.value = heroes.value.find(hero => hero.name === userStore.lastPickedHero.name) || null;
         }
@@ -53,7 +52,8 @@ const selectHero = (hero) => {
 const returnToLobby = async () => {
     if (selectedHero.value) {
         try {
-            await setLastPickedHero(selectedHero.value.id);
+            const newToken = await setLastPickedHero(selectedHero.value);
+            userStore.renewToken(newToken)
         } catch (error) {
             console.error("Failed to set last picked hero:", error);
         }

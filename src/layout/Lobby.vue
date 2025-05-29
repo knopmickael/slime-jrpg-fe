@@ -22,6 +22,7 @@ import UserInfo from "@/components/layout/UserInfo.vue";
 import BackHomeButton from "@/components/layout/BackHomeButton.vue";
 import HeroInfo from "@/components/layout/HeroInfo.vue";
 
+
 const user = useUserStore().$state;
 
 const showUserModal = ref(false);
