@@ -1,5 +1,5 @@
 <template>
-    <div class="my-div">
+    <div class="my-div" :style="mainBgStyle">
         <main>
             <router-view></router-view>
         </main>
@@ -32,14 +32,17 @@ const toggleAppModal = () => {
 };
 
 provide("toggleAppModal", toggleAppModal);
+
+const mainBgStyle = {
+    backgroundImage: "url('/assets/images/menu-bg.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    height: "100vh"
+};
 </script>
 
 <style>
 .my-div {
-    background-image: url('../../public/assets/images/menu-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
+    /* Remove background-image, background-size, background-position, height from here */
 }
-
 </style>
